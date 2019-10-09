@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ros_spatial_utils</name>
+  <version>0.0.1</version>
+  <description>Spatial utility classes and functions</description>
+
+  <maintainer email="VorpalBlade@users.noreply.github.com">Arvid Norlander</maintainer>
+  <author email="VorpalBlade@users.noreply.github.com">Arvid Norlander</author>
+  <license>GPLv3</license>
+
+
+  <!-- Url tags are optional, but multiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/ros_spatial_utils</url> -->
+
+  <!-- The *depend tags are used to specify dependencies -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>Eigen3</depend>
+  <depend>nav_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>tf2</depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+  </export>
+</package>
