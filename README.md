@@ -1,4 +1,7 @@
-# ROS spatial utilities
+# ROS spatial 
+
+[![CircleCI](https://circleci.com/gh/VorpalBlade/ros_spatial_utils.svg?style=svg)](https://circleci.com/gh/VorpalBlade/ros_spatial_utils)
+[![codecov](https://codecov.io/gh/VorpalBlade/ros_spatial_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/VorpalBlade/ros_spatial_utils)
 
 This is a utility library with various useful functions related to spatial
 data structures and calculations.
