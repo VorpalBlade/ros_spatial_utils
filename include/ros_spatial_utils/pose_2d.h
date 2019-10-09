@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 
-#include "ros_spatial_utils/utils.h"
+#include "ros_spatial_utils/angles.h"
 
 #include <Eigen/Geometry>
 #include <geometry_msgs/Pose.h>
@@ -25,12 +25,13 @@
 //! @file
 //! @brief Pose 2D and related operators
 
-namespace ros_spatial_utils {
-
+namespace ros_spatial_utils
+{
 //! @brief 2D pose structure
 //!
 //! @tparam T Floating point type to use
-template<typename T = float> struct Pose2D
+template <typename T = float>
+struct Pose2D
 {
   //! Type of member
   using Scalar = T;
@@ -44,12 +45,12 @@ template<typename T = float> struct Pose2D
 
   //! @name Position
   //! @{
-  T x;
-  T y;
+  T x_;
+  T y_;
   //! @}
 
   //! Angle in radians [-pi, pi]
-  T theta;
+  T theta_;
 
   //! Default constructor
   Pose2D()
@@ -60,35 +61,33 @@ template<typename T = float> struct Pose2D
   }
 
   //! Value constructor
-  Pose2D(T x, T y, T theta)
-    : x(x)
-    , y(y)
-    , theta(theta)
-  {}
+  Pose2D(T x, T y, T theta) : x_(x), y_(y), theta_(theta)
+  {
+  }
 
   //! Copy constructor
-  Pose2D(const Pose2D<T> &other) = default;
+  Pose2D(const Pose2D<T>& other) = default;
 
   //! Default copy assignment
-  Pose2D &operator=(const Pose2D<T> &other) = default;
+  Pose2D& operator=(const Pose2D<T>& other) = default;
 
   //! Conversion constructor
-  template<typename U>
-  inline explicit Pose2D(const Pose2D<U> &other)
-    : x(other.x)
-    , y(other.y)
-    , theta(other.theta)
-  {}
+  template <typename U>
+  inline explicit Pose2D(const Pose2D<U>& other) : x_(other.x_), y_(other.y_), theta_(other.theta_)
+  {
+  }
 
   //! Constructor converting from a ROS pose message.
-  inline explicit Pose2D(const geometry_msgs::Pose &p)
-    : x(T(p.position.x))
-    , y(T(p.position.y))
-    , theta(T(tf2::getYaw(p.orientation)))
-  {}
+  inline explicit Pose2D(const geometry_msgs::Pose& p)
+    : x_(T(p.position.x)), y_(T(p.position.y)), theta_(T(tf2::getYaw(p.orientation)))
+  {
+  }
 
   //! Normalise the angle to [-pi, pi]
-  void normalise() { theta = normalise_angle(theta); }
+  void normalise()
+  {
+    theta_ = normaliseAngle(theta_);
+  }
 
   //! @brief Operator to convert to pose
   //!
@@ -96,10 +95,10 @@ template<typename T = float> struct Pose2D
   inline explicit operator geometry_msgs::Pose() const
   {
     geometry_msgs::Pose pose;
-    pose.position.x = x;
-    pose.position.y = y;
-    pose.orientation.z = std::sin(theta / 2.0f);
-    pose.orientation.w = std::cos(theta / 2.0f);
+    pose.position.x = x_;
+    pose.position.y = y_;
+    pose.orientation.z = std::sin(theta_ / 2.0f);
+    pose.orientation.w = std::cos(theta_ / 2.0f);
     return pose;
   }
 
@@ -107,8 +106,8 @@ template<typename T = float> struct Pose2D
   inline explicit operator Eigen::Affine3d() const
   {
     Eigen::Affine3d transform = Eigen::Affine3d::Identity();
-    transform.translate(Eigen::Vector3d(x, y, 0));
-    transform.rotate(Eigen::AngleAxisd(theta, Eigen::Vector3d(0, 0, 1)));
+    transform.translate(Eigen::Vector3d(x_, y_, 0));
+    transform.rotate(Eigen::AngleAxisd(theta_, Eigen::Vector3d(0, 0, 1)));
     return transform;
   }
 
@@ -116,8 +115,8 @@ template<typename T = float> struct Pose2D
   inline explicit operator Eigen::Affine2f() const
   {
     Eigen::Affine2f transform = Eigen::Affine2f::Identity();
-    transform.translate(Eigen::Vector2f(x, y));
-    transform.rotate(Eigen::Rotation2Df(theta));
+    transform.translate(Eigen::Vector2f(x_, y_));
+    transform.rotate(Eigen::Rotation2Df(theta_));
     return transform;
   }
 
@@ -125,13 +124,16 @@ template<typename T = float> struct Pose2D
   inline explicit operator Eigen::Isometry2f() const
   {
     Eigen::Isometry2f transform = Eigen::Isometry2f::Identity();
-    transform.translate(Eigen::Vector2f(x, y));
-    transform.rotate(Eigen::Rotation2Df(theta));
+    transform.translate(Eigen::Vector2f(x_, y_));
+    transform.rotate(Eigen::Rotation2Df(theta_));
     return transform;
   }
 
   //! Return just the position part.
-  EigenPosition as_position() const { return EigenPosition(x, y); }
+  EigenPosition asPosition() const
+  {
+    return EigenPosition(x_, y_);
+  }
 
   //! @brief Convert to 4D vector.
   //!
@@ -139,7 +141,7 @@ template<typename T = float> struct Pose2D
   //! mean in theta as well.
   //!
   //! @return Vector of x,y,sin(theta),cos(theta)
-  inline Eigen::Vector4d to_decomposed() const
+  inline Eigen::Vector4d toDecomposed() const
   {
     // We cannot sum angles and compute the mean like normal. There are multiple
     // possible definitions of a mean over a cyclic set, but a sensible one is
@@ -150,10 +152,10 @@ template<typename T = float> struct Pose2D
     // https://stackoverflow.com/questions/491738/how-do-you-calculate-the-average-of-a-set-of-circular-data
     // for further discussion on this.
     return Eigen::Vector4d{
-        x,
-        y,
-        std::sin(static_cast<double>(theta)),
-        std::cos(static_cast<double>(theta)),
+      x_,
+      y_,
+      std::sin(static_cast<double>(theta_)),
+      std::cos(static_cast<double>(theta_)),
     };
   }
 
@@ -164,41 +166,41 @@ template<typename T = float> struct Pose2D
   //! Note that none of these normalise the angle, since it isn't needed except
   //! at the very end of the computation.
   //! @{
-  inline Pose2D<T> &operator+=(const Pose2D<T> &b)
+  inline Pose2D<T>& operator+=(const Pose2D<T>& b)
   {
-    x += b.x;
-    y += b.y;
-    theta += b.theta;
+    x_ += b.x_;
+    y_ += b.y_;
+    theta_ += b.theta_;
     return *this;
   }
 
-  inline Pose2D<T> operator+(const Pose2D<T> &b) const
+  inline Pose2D<T> operator+(const Pose2D<T>& b) const
   {
     Pose2D<T> n(*this);
     n += b;
     return n;
   }
 
-  inline Pose2D<T> &operator-=(const Pose2D<T> &b)
+  inline Pose2D<T>& operator-=(const Pose2D<T>& b)
   {
-    x -= b.x;
-    y -= b.y;
-    theta -= b.theta;
+    x_ -= b.x_;
+    y_ -= b.y_;
+    theta_ -= b.theta_;
     return *this;
   }
 
-  inline Pose2D<T> operator-(const Pose2D<T> &b) const
+  inline Pose2D<T> operator-(const Pose2D<T>& b) const
   {
     Pose2D n(*this);
     n -= b;
     return n;
   }
 
-  inline Pose2D<T> &operator*=(T v)
+  inline Pose2D<T>& operator*=(T v)
   {
-    x *= v;
-    y *= v;
-    theta *= v;
+    x_ *= v;
+    y_ *= v;
+    theta_ *= v;
     return *this;
   }
 
@@ -214,16 +216,17 @@ template<typename T = float> struct Pose2D
 //! @brief Operator overload for scalar multiplication
 //!
 //! Note that angle will not be normalised.
-template<typename T> Pose2D<T> operator*(T v, const Pose2D<T> &a)
+template <typename T>
+Pose2D<T> operator*(T v, const Pose2D<T>& a)
 {
   return a * v;
 }
 
 //! Stream output operator for logging and debugging
-std::ostream &operator<<(std::ostream &os, const Pose2D<float> &pose);
+std::ostream& operator<<(std::ostream& os, const Pose2D<float>& pose);
 
 //! Stream output operator for logging and debugging
-std::ostream &operator<<(std::ostream &os, const Pose2D<double> &pose);
+std::ostream& operator<<(std::ostream& os, const Pose2D<double>& pose);
 
 // Explicit instantiation in a single translation unit.
 #ifdef POSE2D_CPP
@@ -233,4 +236,4 @@ template struct Pose2D<double>;
 extern template struct Pose2D<float>;
 extern template struct Pose2D<double>;
 #endif
-} // namespace ros_spatial_utils
+}  // namespace ros_spatial_utils

@@ -23,46 +23,52 @@
 #include <vector>
 
 //! @file
-//! @brief Defines a base map.
+//! @brief Defines a map that can be loaded from a nav_msgs/OccupancyGrid.
 
 namespace ros_spatial_utils
 {
-//! Base Map implementation.
-class MapBase : protected ScaledMapLogic<2>
+//! Basic map implementation.
+class Map : public ScaledMapLogic<2>
 {
 public:
   //! Constructor
-  MapBase();
+  Map();
 
   // See Map for documentation.
-  void new_map(const nav_msgs::OccupancyGrid::ConstPtr& msg);
+  void newMap(const nav_msgs::OccupancyGrid::ConstPtr& msg);
 
-  Pose2D<WorldScalar> generate_random_pose() const;
+  Pose2D<WorldScalar> generateRandomPose() const;
 
   //! @brief Get the map state at the specified world pose. This takes care of
   //!        offset and resolution.
-  MapState get_map_state_at(const WorldCoordinate& world_coord) const;
+  MapState getMapStateAt(const WorldCoordinate& world_coord) const;
 
   // Fix potential assert
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 protected:
   //! Metadata of the most recent map.
-  nav_msgs::MapMetaData metadata;
+  nav_msgs::MapMetaData metadata_;
 
   //! Map state for each cell.
-  MapStateContainer map_state;
+  MapStateContainer map_state_;
 
 private:
   //! Indices of free cells in map, used for generating random poses
-  std::vector<MapCoordinate> free_cells;
+  std::vector<MapCoordinate> free_cells_;
   //! Distribution for free cells.
-  mutable std::uniform_int_distribution<size_t> free_cells_dist;
+  mutable std::uniform_int_distribution<size_t> free_cells_dist_;
   //! Distribution for rotation
-  mutable std::uniform_real_distribution<float> rotation_dist =
+  mutable std::uniform_real_distribution<float> rotation_dist_ =
       std::uniform_real_distribution<float>(static_cast<float>(-M_PI), static_cast<float>(M_PI));
 
   //! Random number generator used to generate random valid poses.
-  mutable std::mt19937 rng = std::mt19937{ std::random_device()() };
+  mutable std::mt19937 rng_ = std::mt19937{ std::random_device()() };
 };
+
+//! @brief Calculate a free/occupied/unknown map
+//!
+//! @param map        Input map.
+//! @param map_state  Output map.
+void computeStateMap(const nav_msgs::OccupancyGrid& map, MapStateContainer* map_state);
 
 }  // namespace ros_spatial_utils

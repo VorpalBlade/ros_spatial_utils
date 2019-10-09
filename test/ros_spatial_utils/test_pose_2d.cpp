@@ -11,7 +11,8 @@ using testing::DoubleEq;
 using testing::Each;
 using testing::Field;
 
-template<typename T> class TestPose2D : public ::testing::Test
+template <typename T>
+class TestPose2D : public ::testing::Test
 {
 public:
   using PoseT = Pose2D<T>;
@@ -29,17 +30,17 @@ TYPED_TEST(TestPose2D, constructor)
 
   auto v = typename TestFixture::PoseT(0, 1, 2);
 
-  EXPECT_FLOAT_EQ(0, v.x);
-  EXPECT_FLOAT_EQ(1, v.y);
-  EXPECT_FLOAT_EQ(2, v.theta);
+  EXPECT_FLOAT_EQ(0, v.x_);
+  EXPECT_FLOAT_EQ(1, v.y_);
+  EXPECT_FLOAT_EQ(2, v.theta_);
 
   // Copy constructor
   auto u(v);
   auto t = u;
 
-  EXPECT_FLOAT_EQ(0, t.x);
-  EXPECT_FLOAT_EQ(1, t.y);
-  EXPECT_FLOAT_EQ(2, t.theta);
+  EXPECT_FLOAT_EQ(0, t.x_);
+  EXPECT_FLOAT_EQ(1, t.y_);
+  EXPECT_FLOAT_EQ(2, t.theta_);
 
   geometry_msgs::Pose p;
   p.position.x = 1;
@@ -48,9 +49,9 @@ TYPED_TEST(TestPose2D, constructor)
   p.orientation.w = std::cos(3.0 / 2.0);
 
   auto pp = typename TestFixture::PoseT(p);
-  EXPECT_FLOAT_EQ(1, pp.x);
-  EXPECT_FLOAT_EQ(2, pp.y);
-  EXPECT_FLOAT_EQ(3, pp.theta);
+  EXPECT_FLOAT_EQ(1, pp.x_);
+  EXPECT_FLOAT_EQ(2, pp.y_);
+  EXPECT_FLOAT_EQ(3, pp.theta_);
 }
 
 TYPED_TEST(TestPose2D, math)
@@ -61,9 +62,9 @@ TYPED_TEST(TestPose2D, math)
   auto c = a + b;
   c = c - static_cast<typename TestFixture::ScalarType>(2.0) * b;
   c.normalise();
-  EXPECT_FLOAT_EQ(-1, c.x);
-  EXPECT_FLOAT_EQ(1, c.y);
-  EXPECT_FLOAT_EQ(-M_PI / 4.0, c.theta);
+  EXPECT_FLOAT_EQ(-1, c.x_);
+  EXPECT_FLOAT_EQ(1, c.y_);
+  EXPECT_FLOAT_EQ(-M_PI / 4.0, c.theta_);
 }
 
 TYPED_TEST(TestPose2D, conversion)
@@ -80,35 +81,35 @@ TYPED_TEST(TestPose2D, conversion)
   Eigen::Affine2f aff2(v);
   Eigen::Isometry2f iso2(v);
 
-  Eigen::Vector2f r1 = aff2 * Eigen::Vector2f{1, 2};
+  Eigen::Vector2f r1 = aff2 * Eigen::Vector2f{ 1, 2 };
   EXPECT_FLOAT_EQ(0.76525831, r1(0));
   EXPECT_FLOAT_EQ(1.0770037, r1(1));
 
-  Eigen::Vector3d r2 = aff3 * Eigen::Vector3d{1, 2, 0};
+  Eigen::Vector3d r2 = aff3 * Eigen::Vector3d{ 1, 2, 0 };
   EXPECT_FLOAT_EQ(0.76525831, r2(0));
   EXPECT_FLOAT_EQ(1.0770037, r2(1));
   EXPECT_FLOAT_EQ(0, r2(2));
 
-  Eigen::Vector2f r3 = iso2 * Eigen::Vector2f{1, 2};
+  Eigen::Vector2f r3 = iso2 * Eigen::Vector2f{ 1, 2 };
   EXPECT_FLOAT_EQ(0.76525831, r3(0));
   EXPECT_FLOAT_EQ(1.0770037, r3(1));
 }
 
-TYPED_TEST(TestPose2D, as_position)
+TYPED_TEST(TestPose2D, asPosition)
 {
   auto v = typename TestFixture::PoseT(2, 1, 2);
 
-  auto dec = v.as_position();
+  auto dec = v.asPosition();
 
   EXPECT_FLOAT_EQ(2, dec(0));
   EXPECT_FLOAT_EQ(1, dec(1));
 }
 
-TYPED_TEST(TestPose2D, to_decomposed)
+TYPED_TEST(TestPose2D, toDecomposed)
 {
   auto v = typename TestFixture::PoseT(2, 1, 2);
 
-  auto dec = v.to_decomposed();
+  auto dec = v.toDecomposed();
 
   EXPECT_FLOAT_EQ(2, dec(0));
   EXPECT_FLOAT_EQ(1, dec(1));
@@ -122,7 +123,7 @@ TYPED_TEST(TestPose2D, normalise)
 
   v.normalise();
 
-  EXPECT_FLOAT_EQ(0, v.x);
-  EXPECT_FLOAT_EQ(1, v.y);
-  EXPECT_FLOAT_EQ(-M_PI + 2, v.theta);
+  EXPECT_FLOAT_EQ(0, v.x_);
+  EXPECT_FLOAT_EQ(1, v.y_);
+  EXPECT_FLOAT_EQ(-M_PI + 2, v.theta_);
 }

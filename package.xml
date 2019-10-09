@@ -16,10 +16,11 @@
 
   <!-- The *depend tags are used to specify dependencies -->
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>Eigen3</depend>
   <depend>nav_msgs</depend>
   <depend>roscpp</depend>
   <depend>tf2</depend>
+
+  <test_depend>rosunit</test_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

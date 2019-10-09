@@ -20,10 +20,11 @@
 //! @file
 //! @brief Definition of Map state
 
-namespace ros_spatial_utils {
-
+namespace ros_spatial_utils
+{
 //! Valued used in MapStateContainer
-enum class MapState : int8_t {
+enum class MapState : int8_t
+{
   //! Space is free
   Free = 0,
   //! Space is occupied
@@ -32,4 +33,4 @@ enum class MapState : int8_t {
   Unknown = 2,
 };
 
-} // namespace ros_spatial_utils
+}  // namespace ros_spatial_utils

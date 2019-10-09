@@ -22,18 +22,18 @@
 //! @file
 //! @brief Pose 2D and related operators
 
-namespace ros_spatial_utils {
-
-std::ostream &operator<<(std::ostream &os, const Pose2D<float> &pose)
+namespace ros_spatial_utils
 {
-  os << "[" << pose.x << "," << pose.y << "," << pose.theta << "]";
+std::ostream& operator<<(std::ostream& os, const Pose2D<float>& pose)
+{
+  os << "[" << pose.x_ << "," << pose.y_ << "," << pose.theta_ << "]";
   return os;
 }
 
-std::ostream &operator<<(std::ostream &os, const Pose2D<double> &pose)
+std::ostream& operator<<(std::ostream& os, const Pose2D<double>& pose)
 {
-  os << "[" << pose.x << "," << pose.y << "," << pose.theta << "]";
+  os << "[" << pose.x_ << "," << pose.y_ << "," << pose.theta_ << "]";
   return os;
 }
 
-} // namespace ros_spatial_utils
+}  // namespace ros_spatial_utils

@@ -23,8 +23,8 @@
 //! @file
 //! @brief AMCL style distance map calculations.
 
-namespace ros_spatial_utils {
-
+namespace ros_spatial_utils
+{
 //! Type of precomputed distance map.
 using DistanceCache = Eigen::MatrixXf;
 
@@ -34,7 +34,7 @@ using DistanceCache = Eigen::MatrixXf;
 //!
 //! @return A matrix with distances to (0,0), which is in the upper left corner
 //!         of the matrix.
-DistanceCache create_distance_cache(float resolution, float max_dist);
+DistanceCache createDistanceCache(float resolution, float max_dist);
 
 //! @brief Calculate a distance-to-obstacle map
 //!
@@ -47,17 +47,6 @@ DistanceCache create_distance_cache(float resolution, float max_dist);
 //! * Positive values < max_dist = Distance to nearest obstacle
 //! * max_dist = Free space, further away
 //! * 0 = Obstacle
-void compute_distance_map(float max_dist,
-                          const nav_msgs::OccupancyGrid &map,
-                          MapContainer *output);
+void computeDistanceMap(float max_dist, const nav_msgs::OccupancyGrid& map, MapContainer* output);
 
-//! @brief Calculate a free/occupied/unknown map
-//!
-//! @param map        Input map.
-//! @param map_state  Output map.
-//!
-//!
-void compute_state_map(const nav_msgs::OccupancyGrid &map,
-                       MapStateContainer *map_state);
-
-} // namespace ros_spatial_utils
+}  // namespace ros_spatial_utils

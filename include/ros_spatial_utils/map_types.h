@@ -21,14 +21,12 @@
 //! @file
 //! @brief Common data type definition for map data.
 
-namespace ros_spatial_utils {
-
+namespace ros_spatial_utils
+{
 //! Data type for map. Use row major to match the ROS occupancy grid.
-using MapContainer =
-    Eigen::Array<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using MapContainer = Eigen::Array<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
 //! Data type for map meta-data. Use row major to match the ROS occupancy grid.
-using MapStateContainer =
-    Eigen::Array<MapState, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using MapStateContainer = Eigen::Array<MapState, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
-} // namespace ros_spatial_utils
+}  // namespace ros_spatial_utils

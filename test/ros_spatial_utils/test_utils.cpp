@@ -1,44 +1,44 @@
-#include "ros_spatial_utils/utils.h"
+#include "ros_spatial_utils/angles.h"
 
 #include <gtest/gtest.h>
 
 using namespace ros_spatial_utils;
 
-TEST(TestUtils, normalise_angle)
+TEST(TestUtils, normaliseAngle)
 {
-  EXPECT_FLOAT_EQ(0.f, normalise_angle(0.f));
-  EXPECT_DOUBLE_EQ(0.0, normalise_angle(0.0));
-  EXPECT_FLOAT_EQ(0, normalise_angle(2 * M_PI));
-  EXPECT_FLOAT_EQ(M_PI - 0.1, normalise_angle(3 * M_PI - 0.1));
-  EXPECT_FLOAT_EQ(0, normalise_angle(4 * M_PI));
-  EXPECT_FLOAT_EQ(0, normalise_angle(-2 * M_PI));
-  EXPECT_FLOAT_EQ(-M_PI + 0.1, normalise_angle(-3 * M_PI + 0.1));
-  EXPECT_FLOAT_EQ(0, normalise_angle(-4 * M_PI));
-  EXPECT_FLOAT_EQ(-M_PI + 2, normalise_angle(M_PI + 2));
+  EXPECT_FLOAT_EQ(0.f, normaliseAngle(0.f));
+  EXPECT_DOUBLE_EQ(0.0, normaliseAngle(0.0));
+  EXPECT_FLOAT_EQ(0, normaliseAngle(2 * M_PI));
+  EXPECT_FLOAT_EQ(M_PI - 0.1, normaliseAngle(3 * M_PI - 0.1));
+  EXPECT_FLOAT_EQ(0, normaliseAngle(4 * M_PI));
+  EXPECT_FLOAT_EQ(0, normaliseAngle(-2 * M_PI));
+  EXPECT_FLOAT_EQ(-M_PI + 0.1, normaliseAngle(-3 * M_PI + 0.1));
+  EXPECT_FLOAT_EQ(0, normaliseAngle(-4 * M_PI));
+  EXPECT_FLOAT_EQ(-M_PI + 2, normaliseAngle(M_PI + 2));
 }
 
-TEST(TestUtils, angle_delta)
+TEST(TestUtils, angleDelta)
 {
-  EXPECT_FLOAT_EQ(-0.1, angle_delta(0.1, 0.2));
-  EXPECT_FLOAT_EQ(0.1, angle_delta(0.2, 0.1));
+  EXPECT_FLOAT_EQ(-0.1, angleDelta(0.1, 0.2));
+  EXPECT_FLOAT_EQ(0.1, angleDelta(0.2, 0.1));
 
-  EXPECT_FLOAT_EQ(-0.1, angle_delta(-0.2, -0.1));
-  EXPECT_FLOAT_EQ(0.1, angle_delta(-0.1, -0.2));
+  EXPECT_FLOAT_EQ(-0.1, angleDelta(-0.2, -0.1));
+  EXPECT_FLOAT_EQ(0.1, angleDelta(-0.1, -0.2));
 
-  EXPECT_FLOAT_EQ(-0.2, angle_delta(-0.1, 0.1));
-  EXPECT_FLOAT_EQ(0.2, angle_delta(0.1, -0.1));
+  EXPECT_FLOAT_EQ(-0.2, angleDelta(-0.1, 0.1));
+  EXPECT_FLOAT_EQ(0.2, angleDelta(0.1, -0.1));
 
-  EXPECT_FLOAT_EQ(0.0, angle_delta(0.1, 0.1));
-  EXPECT_FLOAT_EQ(0.0, angle_delta(-0.1, -0.1));
+  EXPECT_FLOAT_EQ(0.0, angleDelta(0.1, 0.1));
+  EXPECT_FLOAT_EQ(0.0, angleDelta(-0.1, -0.1));
 
-  EXPECT_FLOAT_EQ(-0.2, angle_delta(M_PI - 0.1, -M_PI + 0.1));
-  EXPECT_FLOAT_EQ(0.2, angle_delta(-M_PI + 0.1, M_PI - 0.1));
+  EXPECT_FLOAT_EQ(-0.2, angleDelta(M_PI - 0.1, -M_PI + 0.1));
+  EXPECT_FLOAT_EQ(0.2, angleDelta(-M_PI + 0.1, M_PI - 0.1));
 
-  EXPECT_FLOAT_EQ(0.1, angle_delta(-M_PI, M_PI - 0.1));
-  EXPECT_FLOAT_EQ(-0.1, angle_delta(-M_PI, -M_PI + 0.1));
+  EXPECT_FLOAT_EQ(0.1, angleDelta(-M_PI, M_PI - 0.1));
+  EXPECT_FLOAT_EQ(-0.1, angleDelta(-M_PI, -M_PI + 0.1));
 
-  EXPECT_FLOAT_EQ(0.1, angle_delta(M_PI, M_PI - 0.1));
-  EXPECT_FLOAT_EQ(-0.1, angle_delta(M_PI, -M_PI + 0.1));
+  EXPECT_FLOAT_EQ(0.1, angleDelta(M_PI, M_PI - 0.1));
+  EXPECT_FLOAT_EQ(-0.1, angleDelta(M_PI, -M_PI + 0.1));
 }
 
 TEST(TestUtils, radians)

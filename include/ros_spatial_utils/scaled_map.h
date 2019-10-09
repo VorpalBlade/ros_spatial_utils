@@ -21,10 +21,11 @@
 //! @brief Classes for generic axis aligned maps with a resolution and offset in
 //!        the world.
 
-namespace ros_spatial_utils {
-
+namespace ros_spatial_utils
+{
 //! @brief Generic scaled infinite map (scaling logic only, no map data).
-template<int Dimensions> class ScaledInfiniteMapLogic
+template <int Dimensions>
+class ScaledInfiniteMapLogic
 {
 public:
   //! Type of coordinate in the world
@@ -40,41 +41,41 @@ public:
   ScaledInfiniteMapLogic() = default;
 
   //! Compute map coordinates for a given world coordinate.
-  inline MapCoordinate world_to_map(const WorldCoordinate &pos) const
+  inline MapCoordinate worldToMap(const WorldCoordinate& pos) const
   {
-    return (pos.array() / resolutions.array())
-        .matrix()
-        .template cast<MapScalar>();
+    return (pos.array() / resolutions_.array()).matrix().template cast<MapScalar>();
   }
 
   //! Compute map coordinates for a given world coordinate.
-  inline WorldCoordinate map_to_world(const MapCoordinate &map_pos) const
+  inline WorldCoordinate mapToWorld(const MapCoordinate& map_pos) const
   {
-    return (map_pos.template cast<WorldScalar>().array() * resolutions.array())
-        .matrix();
+    return (map_pos.template cast<WorldScalar>().array() * resolutions_.array()).matrix();
   }
 
   //! @brief Updates the resolution. It is up to the user to ensure the data is
   //!        rescaled for this!
-  void set_resolutions(const WorldCoordinate &resolutions)
+  void setResolutions(const WorldCoordinate& resolutions)
   {
-    this->resolutions = resolutions;
+    this->resolutions_ = resolutions;
   }
 
   //! Gets the current resolutions [m / cell] per dimension.
-  const WorldCoordinate &get_resolutions() const { return resolutions; }
+  const WorldCoordinate& getResolutions() const
+  {
+    return resolutions_;
+  }
 
   // Fix potential assert
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 protected:
   //! Resolution of map [m / cell], per dimension
-  WorldCoordinate resolutions;
+  WorldCoordinate resolutions_;
 };
 
 //! @brief Generic scaled offset axis-aligned map (scaling logic only, no map
 //! data).
-template<int Dimensions>
+template <int Dimensions>
 class ScaledMapLogic : public ScaledInfiniteMapLogic<Dimensions>
 {
 public:
@@ -84,57 +85,47 @@ public:
   ScaledMapLogic() = default;
 
   //! Check if this is a valid coordinate inside the map.
-  inline bool is_in_map(const typename BaseT::MapCoordinate &p) const
+  inline bool isInMap(const typename BaseT::MapCoordinate& p) const
   {
-    return (p.Zero().array() <= p.array()).all() &&
-           (p.array() < map_size.array()).all();
+    return (p.Zero().array() <= p.array()).all() && (p.array() < map_size_.array()).all();
   }
 
   //! Compute map coordinates for a given world coordinate.
-  inline typename BaseT::MapCoordinate
-  world_to_map(const typename BaseT::WorldCoordinate &pos) const
+  inline typename BaseT::MapCoordinate worldToMap(const typename BaseT::WorldCoordinate& pos) const
   {
-    return BaseT::world_to_map(pos - map_offset);
+    return BaseT::worldToMap(pos - map_offset_);
   }
 
   //! Compute map coordinates for a given world coordinate.
-  inline typename BaseT::WorldCoordinate
-  map_to_world(const typename BaseT::MapCoordinate &map_pos) const
+  inline typename BaseT::WorldCoordinate mapToWorld(const typename BaseT::MapCoordinate& map_pos) const
   {
-    return BaseT::map_to_world(map_pos) + map_offset;
+    return BaseT::mapToWorld(map_pos) + map_offset_;
   }
 
   //! Reconfigures the map. Does not ensure consistent data state.
-  void reconfigure_from_world_size(
-      const typename BaseT::WorldCoordinate &world_size,
-      const typename BaseT::WorldCoordinate &world_offset,
-      const typename BaseT::WorldCoordinate &resolutions)
+  void reconfigureFromWorldSize(const typename BaseT::WorldCoordinate& world_size,
+                                const typename BaseT::WorldCoordinate& world_offset,
+                                const typename BaseT::WorldCoordinate& resolutions)
   {
-    this->set_resolutions(resolutions);
-    this->world_size = world_size;
-    this->map_offset = world_offset;
-    this->resolutions = resolutions;
-    typename BaseT::WorldCoordinate world_map_size =
-        (world_size.array() / resolutions.array()).matrix();
-    map_size =
-        world_map_size.template cast<typename BaseT::MapCoordinate::Scalar>();
+    this->setResolutions(resolutions);
+    this->world_size_ = world_size;
+    this->map_offset_ = world_offset;
+    this->resolutions_ = resolutions;
+    typename BaseT::WorldCoordinate world_map_size = (world_size.array() / resolutions.array()).matrix();
+    map_size_ = world_map_size.template cast<typename BaseT::MapCoordinate::Scalar>();
   }
 
   //! Reconfigures the map. Does not ensure consistent data state.
-  void
-  reconfigure_from_map_size(const typename BaseT::MapCoordinate &map_size,
-                            const typename BaseT::WorldCoordinate &world_offset,
-                            const typename BaseT::WorldCoordinate &resolutions)
+  void reconfigureFromMapSize(const typename BaseT::MapCoordinate& map_size,
+                              const typename BaseT::WorldCoordinate& world_offset,
+                              const typename BaseT::WorldCoordinate& resolutions)
   {
-    this->set_resolutions(resolutions);
-    this->map_size = map_size;
-    this->map_offset = world_offset;
-    this->resolutions = resolutions;
-    this->world_size =
-        (map_size.template cast<typename BaseT::WorldCoordinate::Scalar>()
-             .array() *
-         resolutions.array())
-            .matrix();
+    this->setResolutions(resolutions);
+    this->map_size_ = map_size;
+    this->map_offset_ = world_offset;
+    this->resolutions_ = resolutions;
+    this->world_size_ =
+        (map_size.template cast<typename BaseT::WorldCoordinate::Scalar>().array() * resolutions.array()).matrix();
   }
 
   // Fix potential assert
@@ -142,11 +133,11 @@ public:
 
 protected:
   //! Size of map in world coordinates
-  typename BaseT::WorldCoordinate world_size;
+  typename BaseT::WorldCoordinate world_size_;
   //! Offset of (0,0) corner of map in world coordinates
-  typename BaseT::WorldCoordinate map_offset;
+  typename BaseT::WorldCoordinate map_offset_;
   //! Size of map in map coordinates
-  typename BaseT::MapCoordinate map_size;
+  typename BaseT::MapCoordinate map_size_;
 };
 
-} // namespace ros_spatial_utils
+}  // namespace ros_spatial_utils

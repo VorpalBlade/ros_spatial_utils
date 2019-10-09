@@ -114,7 +114,7 @@ find_package(Eigen3 REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ros_spatial_utils
+  LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS ${${PROJECT_NAME}_catkin_deps_public}
   DEPENDS EIGEN3
 )
@@ -134,14 +134,14 @@ include_directories(
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
     include/${PROJECT_NAME}/distance_calculator.h
-    include/${PROJECT_NAME}/map_base.h
+    include/${PROJECT_NAME}/map.h
     include/${PROJECT_NAME}/map_state.h
     include/${PROJECT_NAME}/map_types.h
     include/${PROJECT_NAME}/pose_2d.h
     include/${PROJECT_NAME}/scaled_map.h
-    include/${PROJECT_NAME}/utils.h
+    include/${PROJECT_NAME}/angles.h
     src/${PROJECT_NAME}/distance_calculator.cpp
-    src/${PROJECT_NAME}/map_base.cpp
+    src/${PROJECT_NAME}/map.cpp
     src/${PROJECT_NAME}/pose_2d.cpp
 )
 
@@ -221,6 +221,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 if(CATKIN_ENABLE_TESTING)
   catkin_add_gtest(${PROJECT_NAME}-test
     test/${PROJECT_NAME}/test_distance_calculator.cpp
+    test/${PROJECT_NAME}/test_map.cpp
     test/${PROJECT_NAME}/test_pose_2d.cpp
     test/${PROJECT_NAME}/test_scaled_map.cpp
     test/${PROJECT_NAME}/test_utils.cpp
