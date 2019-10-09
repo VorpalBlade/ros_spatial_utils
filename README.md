@@ -1,4 +1,4 @@
-# ROS spatial 
+# ROS spatial utilities
 
 [![CircleCI](https://circleci.com/gh/VorpalBlade/ros_spatial_utils.svg?style=svg)](https://circleci.com/gh/VorpalBlade/ros_spatial_utils)
 [![codecov](https://codecov.io/gh/VorpalBlade/ros_spatial_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/VorpalBlade/ros_spatial_utils)
