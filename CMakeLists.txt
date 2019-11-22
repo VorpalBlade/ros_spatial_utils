@@ -151,6 +151,9 @@ add_library(${PROJECT_NAME}
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
+# We cannot use Eigen's non-permissive parts since we are switching to either MPL or Apache 2.0 soon
+target_compile_definitions(${PROJECT_NAME} PRIVATE EIGEN_MPL2_ONLY)
+
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
