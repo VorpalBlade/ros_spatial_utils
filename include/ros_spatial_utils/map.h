@@ -20,6 +20,7 @@
 #include "ros_spatial_utils/scaled_map.h"
 
 #include <nav_msgs/OccupancyGrid.h>
+#include <random>
 #include <vector>
 
 //! @file
