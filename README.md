@@ -1,7 +1,10 @@
 # ROS spatial utilities
 
-[![CircleCI](https://circleci.com/gh/VorpalBlade/ros_spatial_utils.svg?style=svg)](https://circleci.com/gh/VorpalBlade/ros_spatial_utils)
-[![codecov](https://codecov.io/gh/VorpalBlade/ros_spatial_utils/branch/master/graph/badge.svg)](https://codecov.io/gh/VorpalBlade/ros_spatial_utils)
+**NOTE**: I no longer work in the field of robotics, this is not maintained. But
+hopefully the ideas and techniques presented here might be of use to you. Or the
+software itself might even still work!
+
+---
 
 This is a utility library with various useful functions related to spatial
 data structures and calculations.
